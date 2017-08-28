@@ -15,9 +15,10 @@
 </div>
 
 <script type="text/javascript">
+
+	var quantity = ${sessionScope.quantity};
 	window.onload = function(){
 		//alert($("input[name='selectBox']:eq(2)").val());
-		var quantity = ${sessionScope.quantity};
 		if(quantity > 1){
 			//alert(quantity);
 			$("input[name='selectBox']").attr("type", "checkbox");
@@ -25,5 +26,10 @@
 			$("input[name='selectBox']").attr("type", "radio");
 		}
 	}
+	
+	var number = 0;
+	$("input[name='selectBox']").click(function(){
+		
+	});
 		
 </script>
