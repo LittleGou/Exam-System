@@ -30,7 +30,7 @@
     	<%@ include file="nav.jsp"%>
     	<%@ include file="test.jsp" %>
     </div>
-    
+
 <!-- ----------------------------------End-------------------------------------------------- -->
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>

@@ -1,27 +1,30 @@
 package com.exam.entity;
 
+import java.util.ArrayList;
+
 public class Question {
-	private String code;
+	private String paper;
 	private Integer number;
-	private String question;
-	private String choice;
-	private String answer;
+	private String content;
+	private ArrayList<String> choice;
+	private String answers;
 	private Integer quantity;
-	private String comment;
+	private String comments;
 	
-	public String getCode() {return code;}
-	public void setCode(String code) {this.code = code;}
+	public String getPaper() {return paper;}
+	public void setPaper(String paper) {this.paper = paper;}
 	public Integer getNumber() {return number;}
 	public void setNumber(Integer number) {this.number = number;}
-	public String getQuestion() {return question;}
-	public void setQuestion(String question) {this.question = question;}
-	public String getChoice() {return choice;}
-	public void setChoice(String choice) {this.choice = choice;}
-	public String getAnswer() {return answer;}
-	public void setAnswer(String answer) {this.answer = answer;}
+	public String getContent() {return content;}
+	public void setContent(String content) {this.content = content;}
+	public ArrayList<String> getChoice() {return choice;}
+	public void setChoice(ArrayList<String> choice) {this.choice = choice;}
+	public String getAnswers() {return answers;}
+	public void setAnswers(String answers) {this.answers = answers;}
 	public Integer getQuantity() {return quantity;}
 	public void setQuantity(Integer quantity) {this.quantity = quantity;}
-	public String getComment() {return comment;}
-	public void setComment(String comment) {this.comment = comment;}
+	public String getComments() {return comments;}
+	public void setComments(String comments) {this.comments = comments;}
+
 	
 }

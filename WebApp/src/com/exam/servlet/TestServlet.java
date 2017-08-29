@@ -1,7 +1,6 @@
 package com.exam.servlet;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,9 +20,8 @@ import com.exam.utils.Code;
 public class TestServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-	
 	private String action = null;
-	private String code = null;
+	private String paper = null;
 	private Integer number = null;
 	
 	private TestDAO testDAO = new TestDAOImpl();
@@ -53,54 +51,39 @@ public class TestServlet extends HttpServlet {
 		switch (action){
 			case "test":
 				startTest(request, response);
+				break;
 			case "check":
-				checkAnswer(request, response);
+				break;
 		}
 	}
 
 /*---------------------------------------------------------------------------------------------------*/	
 	public void startTest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		code = request.getParameter("code");
+		paper = request.getParameter("paper");
 		number = Integer.parseInt(request.getParameter("number"));
 		
 		Question question = new Question();
-		question.setCode(code);
+		question.setPaper(paper);
 		question.setNumber(number);
-		String content = null;
-		ArrayList<String> choices = null;
-		Integer quantity = null;
 		String[] choicesCode = null;
+
 		try {
-			content = testDAO.getQuestion(question);
-			choices = testDAO.getChoice(question);
-			quantity = testDAO.getQuantity(question);
-			choicesCode = new String[choices.size()];
-			for(int i = 0; i < choices.size(); i++){
+			question = testDAO.getAll(question);
+			choicesCode = new String[question.getChoice().size()];
+			for(int i = 0; i < question.getChoice().size(); i++){
 				choicesCode[i] = Code.CODE[i];
 				System.out.println(choicesCode[i]);
 			}
-			for(String each:choices){
-				System.out.println(each);
-			}
-			
-			if(content != null && choices != null){
-				request.getSession().setAttribute("question", question);
-				request.getSession().setAttribute("questionContent", content);
-				request.getSession().setAttribute("choices", choices);
-				request.getSession().setAttribute("quantity", quantity);
-				request.getSession().setAttribute("choicesCode", choicesCode);
-				response.sendRedirect(request.getContextPath()+"/exam.jsp");
-				//request.getRequestDispatcher("/exam.jsp").forward(request, response);
-			}else {
-				System.out.println("No Content ...");
-			}
-		} catch (Exception e) {
+			request.getSession().setAttribute("question", question);
+			request.getSession().setAttribute("choicesCode", choicesCode);
+			response.sendRedirect(request.getContextPath()+"/exam.jsp");
+		}catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
 /*---------------------------------------------------------------------------------------------------*/	
-	public void checkAnswer(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
-		
-	}
+
+/*---------------------------------------------------------------------------------------------------*/	
+	
 }

@@ -12,7 +12,7 @@
 		<br><br><span>To better prepare your OCJP exam, try out one of the trial exams below now !</span>
 		</p><br>
 		
-		<a class = "btn btn-primary btn-lg" href="${pageContext.request.contextPath}/servlet/TestServlet?action=test&code=A&number=1" role="button">Exam A</a> &nbsp;
+		<a class = "btn btn-primary btn-lg" href="${pageContext.request.contextPath}/servlet/TestServlet?action=test&paper=A&number=1" role="button">Exam A</a> &nbsp;
 		<a class = "btn btn-success btn-lg" href="${pageContext.request.contextPath}/" role="button">Exam B</a> &nbsp;	
 		<a class = "btn btn-info btn-lg" href="${pageContext.request.contextPath}/" role="button">Exam C</a> &nbsp;		
 		<a class = "btn btn-warning btn-lg" href="${pageContext.request.contextPath}/" role="button">Exam D</a> &nbsp;		
