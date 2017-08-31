@@ -23,6 +23,7 @@ public class TestServlet extends HttpServlet {
 	private String action = null;
 	private String paper = null;
 	private Integer number = null;
+	private Integer[] mark = new Integer[60];
 	
 	private TestDAO testDAO = new TestDAOImpl();
 	
@@ -76,6 +77,7 @@ public class TestServlet extends HttpServlet {
 			}
 			request.getSession().setAttribute("question", question);
 			request.getSession().setAttribute("choicesCode", choicesCode);
+			request.getSession().setAttribute("mark", mark);
 			response.sendRedirect(request.getContextPath()+"/exam.jsp");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -83,7 +85,7 @@ public class TestServlet extends HttpServlet {
 	}
 
 /*---------------------------------------------------------------------------------------------------*/	
-
+ //to do: server side cookie
 /*---------------------------------------------------------------------------------------------------*/	
 	
 }
