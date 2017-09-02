@@ -1,6 +1,11 @@
 package com.exam.servlet;
 
 import java.io.IOException;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,8 +28,7 @@ public class TestServlet extends HttpServlet {
 	private String action = null;
 	private String paper = null;
 	private Integer number = null;
-	private Integer[] mark = new Integer[60];
-	
+	private String choices = null;
 	private TestDAO testDAO = new TestDAOImpl();
 	
     /**
@@ -53,7 +57,8 @@ public class TestServlet extends HttpServlet {
 			case "test":
 				startTest(request, response);
 				break;
-			case "check":
+			case "submit":
+				submitMark((Question)request.getSession().getAttribute("question"), request, response);
 				break;
 		}
 	}
@@ -70,14 +75,23 @@ public class TestServlet extends HttpServlet {
 
 		try {
 			question = testDAO.getAll(question);
+			// Choice Code
 			choicesCode = new String[question.getChoice().size()];
 			for(int i = 0; i < question.getChoice().size(); i++){
 				choicesCode[i] = Code.CODE[i];
-				System.out.println(choicesCode[i]);
+			}
+			// Mark Map
+			if(request.getSession().getAttribute("markMap") == null){
+				Map<Integer,Integer> markMap = makeMap();
+				request.getSession().setAttribute("markMap", markMap);
+			}
+			// Correct Map
+			if(request.getSession().getAttribute("correctMap") == null){
+				Map<Integer,Integer> correctMap = makeMap();
+				request.getSession().setAttribute("correctMap", correctMap);
 			}
 			request.getSession().setAttribute("question", question);
 			request.getSession().setAttribute("choicesCode", choicesCode);
-			request.getSession().setAttribute("mark", mark);
 			response.sendRedirect(request.getContextPath()+"/exam.jsp");
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -85,7 +99,46 @@ public class TestServlet extends HttpServlet {
 	}
 
 /*---------------------------------------------------------------------------------------------------*/	
- //to do: server side cookie
+	public void submitMark(Question question, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		paper = question.getPaper();
+		number = question.getNumber();
+		System.out.println(paper);
+		System.out.println(number);
+		choices = request.getParameter("choices");
+		
+		// Modify Mark Map
+		@SuppressWarnings("unchecked")
+		Map<Integer,Integer> markMap = (Map<Integer, Integer>) request.getSession().getAttribute("markMap");
+		markMap.put(number, 1);
+		request.getSession().setAttribute("markMap", markMap);
+		// Modify Correct Map
+		@SuppressWarnings("unchecked")
+		Map<Integer,Integer> correctMap = (Map<Integer, Integer>) request.getSession().getAttribute("correctMap");
+		if(choices.equals(question.getAnswers())){
+			correctMap.put(number, 1);
+			request.getSession().setAttribute("correctMap", correctMap);
+		}
+		
+		response.sendRedirect(request.getContextPath()+"/servlet/TestServlet?action=test&paper="+paper+"&number="+number);
+	}
 /*---------------------------------------------------------------------------------------------------*/	
+	// Make Map
+	private Map<Integer,Integer> makeMap(){
+		Map<Integer,Integer> map = new TreeMap<Integer,Integer>();
+		for (int i = 1; i <= 60; i++){
+			map.put(i, 0);
+		}
+		return map;
+	}
 	
+	// Iterate Map function
+	@SuppressWarnings("rawtypes")
+	private void iterateMap(Map map){
+		Set set = map.entrySet();
+		Iterator it = set.iterator();
+		while(it.hasNext()){
+			Entry entry = (Entry)it.next();
+			System.out.println(entry.getKey()+"="+entry.getValue());
+		}
+	}
 }

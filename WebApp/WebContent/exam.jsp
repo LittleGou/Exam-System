@@ -15,7 +15,6 @@
     <link href="css/customize.css" rel="stylesheet">
 
 	<!-- jQuery -->
-	<script src="js/jquery.cookie.js"></script>
 	<script src="js/jquery.min.js"></script>
 	
 	

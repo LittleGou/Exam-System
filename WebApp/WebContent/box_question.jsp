@@ -16,8 +16,6 @@
 //---------------------------------------------------------------------------------------
 
 	var quantity = '${sessionScope.question.quantity}';
-	var answers = '${sessionScope.question.answers}';
-	var comments ='{sessionScope.question.comments}';
 	
 	$(function(){
 		//alert($("input[name='selectBox']:eq(2)").val());
