@@ -60,6 +60,8 @@ public class TestServlet extends HttpServlet {
 			case "submit":
 				submitMark((Question)request.getSession().getAttribute("question"), request, response);
 				break;
+			case "restart":
+				restart(request, response);
 		}
 	}
 
@@ -85,6 +87,11 @@ public class TestServlet extends HttpServlet {
 				Map<Integer,Integer> markMap = makeMap();
 				request.getSession().setAttribute("markMap", markMap);
 			}
+			// Color Map
+			if(request.getSession().getAttribute("colorMap") == null) {
+				Map<Integer,Integer> colorMap = makeMap();
+				request.getSession().setAttribute("colorMap", colorMap);
+			}
 			// Correct Map
 			if(request.getSession().getAttribute("correctMap") == null){
 				Map<Integer,Integer> correctMap = makeMap();
@@ -99,6 +106,7 @@ public class TestServlet extends HttpServlet {
 	}
 
 /*---------------------------------------------------------------------------------------------------*/	
+	@SuppressWarnings("unchecked")
 	public void submitMark(Question question, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
 		paper = question.getPaper();
 		number = question.getNumber();
@@ -107,18 +115,21 @@ public class TestServlet extends HttpServlet {
 		choices = request.getParameter("choices");
 		
 		// Modify Mark Map
-		@SuppressWarnings("unchecked")
-		Map<Integer,Integer> markMap = (Map<Integer, Integer>) request.getSession().getAttribute("markMap");
+		Map<Integer,Integer> markMap = (Map<Integer,Integer>) request.getSession().getAttribute("markMap");
 		markMap.put(number, 1);
 		request.getSession().setAttribute("markMap", markMap);
-		// Modify Correct Map
-		@SuppressWarnings("unchecked")
-		Map<Integer,Integer> correctMap = (Map<Integer, Integer>) request.getSession().getAttribute("correctMap");
+		// Modify Correct Color Map
+		Map<Integer,Integer> correctMap = (Map<Integer,Integer>) request.getSession().getAttribute("correctMap");
+		Map<Integer,Integer> colorMap = (Map<Integer,Integer>) request.getSession().getAttribute("colorMap");
 		if(choices.equals(question.getAnswers())){
 			correctMap.put(number, 1);
+			colorMap.put(number, 1);
 			request.getSession().setAttribute("correctMap", correctMap);
+			request.getSession().setAttribute("colorMap", colorMap);
+		}else {
+			colorMap.put(number, 2);
+			request.getSession().setAttribute("colorMap", colorMap);
 		}
-		
 		response.sendRedirect(request.getContextPath()+"/servlet/TestServlet?action=test&paper="+paper+"&number="+number);
 	}
 /*---------------------------------------------------------------------------------------------------*/	
@@ -130,15 +141,22 @@ public class TestServlet extends HttpServlet {
 		}
 		return map;
 	}
-	
-	// Iterate Map function
-	@SuppressWarnings("rawtypes")
-	private void iterateMap(Map map){
-		Set set = map.entrySet();
-		Iterator it = set.iterator();
-		while(it.hasNext()){
-			Entry entry = (Entry)it.next();
-			System.out.println(entry.getKey()+"="+entry.getValue());
-		}
+/*---------------------------------------------------------------------------------------------------*/	
+	public void restart(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException{
+		request.getSession().invalidate();
+		response.sendRedirect(request.getContextPath());
 	}
+
+/*---------------------------------------------------------------------------------------------------*/	
+
+	// Iterate Map function
+//	@SuppressWarnings("rawtypes")
+//	private void iterateMap(Map map){
+//		Set set = map.entrySet();
+//		Iterator it = set.iterator();
+//		while(it.hasNext()){
+//			Entry entry = (Entry)it.next();
+//			System.out.println(entry.getKey()+"="+entry.getValue());
+//		}
+//	}
 }
