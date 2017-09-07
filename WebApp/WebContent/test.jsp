@@ -63,6 +63,7 @@
 	/* 
 	Retrieve Information without Using AJAX/JSON
 	*/
+	//haha
 	window.onload = function(){
 		var mark = [];
 		var correct = [];
